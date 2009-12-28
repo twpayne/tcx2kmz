@@ -1,5 +1,5 @@
-#   igc2kmz KML functions
-#   Copyright (C) 2008  Tom Payne
+#   tcx2kmz KML functions
+#   Copyright (C) 2008-9  Tom Payne
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
