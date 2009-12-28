@@ -11,22 +11,50 @@ class Base(object):
 
 class Creator(Base):
 
-    __slots__ = ('name', 'unit_id', 'product_id', 'version_major', 'version_minor', 'build_major', 'build_minor')
+    __slots__ = (
+        'name',
+        'unit_id',
+        'product_id',
+        'version_major',
+        'version_minor',
+        'build_major',
+        'build_minor')
 
 
 class Trackpoint(Base):
 
-    __slots__ = ('time', 'latitude_degrees', 'longitude_degrees', 'altitude_meters', 'distance_meters', 'heart_rate_bpm', 'sensor_state')
+    __slots__ = (
+        'time',
+        'latitude_degrees',
+        'longitude_degrees',
+        'altitude_meters',
+        'distance_meters',
+        'heart_rate_bpm',
+        'sensor_state')
 
 
 class Lap(Base):
 
-    __slots__ = ('start_time', 'total_time_seconds', 'distance_meters', 'maximum_speed', 'calories', 'average_heart_rate_bpm', 'maximum_heart_rate_bpm', 'intensity', 'trigger_method', 'track')
+    __slots__ = (
+        'start_time',
+        'total_time_seconds',
+        'distance_meters',
+        'maximum_speed',
+        'calories',
+        'average_heart_rate_bpm',
+        'maximum_heart_rate_bpm',
+        'intensity',
+        'trigger_method',
+        'track')
 
 
 class Activity(Base):
 
-    __slots__ = ('sport', 'id', 'laps', 'creator')
+    __slots__ = (
+        'sport',
+        'id',
+        'laps',
+        'creator')
 
 
 class TCX(Base):
