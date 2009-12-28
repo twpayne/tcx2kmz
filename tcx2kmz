@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+import sys
+
+import kml
+from tcx import TCX
+
+
+def valid_coordinates(trackpoints):
+    return ((t.longitude_degrees, t.latitude_degrees, 0) for t in trackpoints if t.longitude_degrees and t.latitude_degrees)
+
+
+def main(argv):
+    tcx = TCX.parse(sys.stdin)
+    folder = kml.Folder()
+    for activity in tcx.activities:
+        placemark = kml.Placemark(name=activity.id)
+        multi_geometry = kml.MultiGeometry()
+        for lap in activity.laps:
+            line_string = kml.LineString(coordinates=valid_coordinates(lap.track))
+            multi_geometry.add(line_string)
+        placemark.add(multi_geometry)
+        folder.add(placemark)
+    kml.kml('2.0', folder).write(sys.stdout)
+
+
+if __name__ == '__main__':
+    main(sys.argv)
