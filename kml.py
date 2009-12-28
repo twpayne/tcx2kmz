@@ -180,8 +180,7 @@ class color(_SimpleElement):
 class coordinates(_SimpleElement):
 
     def __init__(self, coords):
-        texts = ('%f,%f,%d' % (c.lon_deg, c.lat_deg, c.ele) for c in coords)
-        _SimpleElement.__init__(self, ' '.join(texts))
+        _SimpleElement.__init__(self, ' '.join('%s,%s,%s' % c for c in coords))
 
     @classmethod
     def circle(cls, center, radius, ele=None, error=0.1):
