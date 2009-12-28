@@ -78,7 +78,7 @@ class TrackpointBuilder(ObjectBuilder):
             'DistanceMeters': SetAttrBuilder('distance_meters', float),
             'HeartRateBpm': Builder({
                 'Value': SetAttrBuilder('heart_rate_bpm', int)}),
-            'SensorState': SetAttrBuilder('sensor_state')})
+            'SensorState': SetAttrBuilder('sensor_state', lambda s: s == 'Present')})
 
     def exit(self, object_stack, name):
         trackpoint = object_stack.pop()
