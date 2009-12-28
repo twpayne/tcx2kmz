@@ -11,56 +11,62 @@ class Base(object):
 
 class Creator(Base):
 
-    __slots__ = (
-        'name',
-        'unit_id',
-        'product_id',
-        'version_major',
-        'version_minor',
-        'build_major',
-        'build_minor')
+    def __init__(self, **attrs):
+        self.name = None
+        self.unit_id = None
+        self.product_id = None
+        self.version_major = None
+        self.version_minor = None
+        self.build_major = None
+        self.build_minor = None
+        Base.__init__(self, **attrs)
 
 
 class Trackpoint(Base):
 
-    __slots__ = (
-        'time',
-        'latitude_degrees',
-        'longitude_degrees',
-        'altitude_meters',
-        'distance_meters',
-        'heart_rate_bpm',
-        'cadence',
-        'sensor_state')
+    def __init__(self, **attrs):
+        self.time = None
+        self.latitude_degrees = None
+        self.longitude_degrees = None
+        self.altitude_meters = None
+        self.distance_meters = None
+        self.heart_rate_bpm = None
+        self.cadence = None
+        self.sensor_state = None
+        Base.__init__(self, **attrs)
 
 
 class Lap(Base):
 
-    __slots__ = (
-        'start_time',
-        'total_time_seconds',
-        'distance_meters',
-        'maximum_speed',
-        'calories',
-        'average_heart_rate_bpm',
-        'maximum_heart_rate_bpm',
-        'intensity',
-        'trigger_method',
-        'track')
+    def __init__(self, **attrs):
+        self.start_time = None
+        self.total_time_seconds = None
+        self.distance_meters = None
+        self.maximum_speed = None
+        self.calories = None
+        self.average_heart_rate_bpm = None
+        self.maximum_heart_rate_bpm = None
+        self.intensity = None
+        self.trigger_method = None
+        self.track = []
+        Base.__init__(self, **attrs)
 
 
 class Activity(Base):
 
-    __slots__ = (
-        'sport',
-        'id',
-        'laps',
-        'creator')
+    def __init__(self, **attrs):
+        self.sport = None
+        self.id = None
+        self.laps = []
+        self.creator = None
+        Base.__init__(self, **attrs)
 
 
 class TCX(Base):
 
-    __slots__ = ('activities')
+    def __init__(self, **attrs):
+        self.activities = []
+        Base.__init__(self, **attrs)
 
     @classmethod
     def parse(self, file):
@@ -114,9 +120,7 @@ class LapBuilder(Builder):
             'Track': TrackBuilder()})
     
     def enter(self, object_stack, name, attrs):
-        object_stack.append(Lap(
-                start_time=datetime.strptime(attrs.get('StartTime'), '%Y-%m-%dT%H:%M:%SZ'),
-                track=[]))
+        object_stack.append(Lap(start_time=datetime.strptime(attrs.get('StartTime'), '%Y-%m-%dT%H:%M:%SZ')))
 
     def exit(self, object_stack, name):
         lap = object_stack.pop()
@@ -150,9 +154,7 @@ class ActivityBuilder(Builder):
             'Creator': CreatorBuilder()})
 
     def enter(self, object_stack, name, attrs):
-        object_stack.append(Activity(
-            sport=attrs.get('Sport'),
-            laps=[]))
+        object_stack.append(Activity(sport=attrs.get('Sport')))
 
     def exit(self, object_stack, name):
         activity = object_stack.pop()
