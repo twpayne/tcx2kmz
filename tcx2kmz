@@ -6,22 +6,32 @@ import kml
 from tcx import TCX
 
 
-def valid_coordinates(trackpoints):
-    return ((t.longitude_degrees, t.latitude_degrees, 0) for t in trackpoints if t.longitude_degrees and t.latitude_degrees)
-
-
 def main(argv):
     tcx = TCX.parse(sys.stdin)
-    folder = kml.Folder()
+    document = kml.Document()
+    schema = kml.Schema()
+    schema.add(kml.gxSimpleArrayField(displayName='Heart Rate').add_attrs(name='heart_rate', type='int'))
+    document.add(schema)
     for activity in tcx.activities:
-        placemark = kml.Placemark(name=activity.id)
-        multi_geometry = kml.MultiGeometry()
+        placemark = kml.Placemark(name='%s %s' % (activity.sport, activity.id))
+        style = kml.Style()
+        style.add(kml.LineStyle(color='ff0000ff', width=3))
+        style.add(kml.IconStyle(kml.Icon(href='http://earth.google.com/images/kml-icons/track-directional/track-0.png')))
+        placemark.add(style)
+        multi_track = kml.gxMultiTrack()
         for lap in activity.laps:
-            line_string = kml.LineString(coordinates=valid_coordinates(lap.track))
-            multi_geometry.add(line_string)
-        placemark.add(multi_geometry)
-        folder.add(placemark)
-    kml.kml('2.0', folder).write(sys.stdout)
+            track = kml.gxTrack(altitudeMode='clampToGround')
+            heart_rate = kml.gxSimpleArrayData().add_attrs(name='heart_rate')
+            for trackpoint in lap.track:
+                if trackpoint.latitude_degrees and trackpoint.longitude_degrees:
+                    track.add(kml.when(trackpoint.time))
+                    track.add(kml.gxcoord((trackpoint.longitude_degrees, trackpoint.latitude_degrees, trackpoint.altitude_meters)))
+                    heart_rate.add(kml.gxvalue(trackpoint.heart_rate_bpm))
+            track.add(kml.ExtendedData(kml.SchemaData(heart_rate).add_attrs(schemaUrl='#' + schema.id())))
+            multi_track.add(track)
+        placemark.add(multi_track)
+        document.add(placemark)
+    kml.kml('2.2', ('gx',), document).pretty_write(sys.stdout)
 
 
 if __name__ == '__main__':
