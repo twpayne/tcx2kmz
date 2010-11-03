@@ -36,7 +36,10 @@ class _Element(object):
 
     def name(self):
         """Return name."""
-        return self.__class__.__name__
+        if self.__class__.__name__.startswith('gx'):
+            return 'gx:' + self.__class__.__name__[2:]
+        else:
+            return self.__class__.__name__
 
     def id(self):
         """Return a unique id."""
@@ -243,6 +246,17 @@ class ExtendedData(_CompoundElement):
 
 class extrude(_SimpleElement): pass
 class Folder(_CompoundElement): pass
+
+
+class gxcoord(_SimpleElement):
+
+    def __init__(self, coord):
+        _SimpleElement.__init__(self, ' '.join(map(str, coord)))
+
+
+class gxMultiTrack(_CompoundElement): pass
+class gxSimpleArrayField(_CompoundElement): pass
+class gxTrack(_CompoundElement): pass
 class heading(_SimpleElement): pass
 class href(_SimpleElement): pass
 
@@ -287,9 +301,11 @@ class IconStyle(_CompoundElement): pass
 
 class kml(_CompoundElement):
 
-    def __init__(self, version, *args, **kwargs):
+    def __init__(self, version, options, *args, **kwargs):
         _CompoundElement.__init__(self, *args, **kwargs)
         self.add_attrs(xmlns='http://earth.google.com/kml/%s' % version)
+        if 'gx' in options:
+            self.add_attrs({'xmlns:gx': 'http://www.google.com/kml/ext/2.2'})
 
     def write(self, file):
         """Write self to file."""
