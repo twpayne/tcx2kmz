@@ -132,6 +132,13 @@ class _CompoundElement(_Element):
             return '<%s%s/>' % (self.name(), attrs)
 
 
+class _ReferableCompoundElement(_CompoundElement):
+
+    def __init__(self, *args, **kwargs):
+        _CompoundElement.__init__(self, *args, **kwargs)
+        self.add_attrs(id=self.id())
+
+
 class Verbatim(_Element):
 
     def __init__(self, value):
@@ -310,15 +317,7 @@ class ScreenOverlay(_CompoundElement): pass
 class screenXY(_SimpleElement): pass
 class size(_SimpleElement): pass
 class Snippet(_SimpleElement): pass
-
-
-class Style(_CompoundElement):
-
-    def __init__(self, *args, **kwargs):
-        _CompoundElement.__init__(self, *args, **kwargs)
-        self.add_attrs(id=self.id())
-
-
+class Style(_ReferableCompoundElement): pass
 class styleUrl(_SimpleElement): pass
 class tessellate(_SimpleElement): pass
 class text(_SimpleElement): pass
