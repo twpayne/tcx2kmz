@@ -85,8 +85,10 @@ class _CompoundElement(_Element):
         self.children = []
         self.add(*args, **kwargs)
 
-    def add_attrs(self, **kwargs):
+    def add_attrs(self, *args, **kwargs):
         """Add attributes."""
+        for arg in args:
+            self.attrs.update(arg)
         self.attrs.update(kwargs)
 
     def add(self, *args, **kwargs):
