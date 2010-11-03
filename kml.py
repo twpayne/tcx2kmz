@@ -233,6 +233,7 @@ class Data(_CompoundElement):
 
 
 class description(_SimpleElement): pass
+class displayName(_SimpleElement): pass
 class Document(_CompoundElement): pass
 class end(_SimpleElement): pass
 
@@ -244,6 +245,7 @@ class ExtendedData(_CompoundElement):
         return cls(*[Data(key, value=value) for key, value in dict.items()])
 
 
+class ExtendedData(_CompoundElement): pass
 class extrude(_SimpleElement): pass
 class Folder(_CompoundElement): pass
 
@@ -255,8 +257,10 @@ class gxcoord(_SimpleElement):
 
 
 class gxMultiTrack(_CompoundElement): pass
+class gxSimpleArrayData(_CompoundElement): pass
 class gxSimpleArrayField(_CompoundElement): pass
 class gxTrack(_CompoundElement): pass
+class gxvalue(_SimpleElement): pass
 class heading(_SimpleElement): pass
 class href(_SimpleElement): pass
 
@@ -332,6 +336,8 @@ class scale(_SimpleElement): pass
 class ScreenOverlay(_CompoundElement): pass
 class screenXY(_SimpleElement): pass
 class size(_SimpleElement): pass
+class Schema(_ReferableCompoundElement): pass
+class SchemaData(_CompoundElement): pass
 class Snippet(_SimpleElement): pass
 class Style(_ReferableCompoundElement): pass
 class styleUrl(_SimpleElement): pass
