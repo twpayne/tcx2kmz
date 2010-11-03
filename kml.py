@@ -341,7 +341,14 @@ class tilt(_SimpleElement): pass
 class TimeSpan(_CompoundElement): pass
 class value(_SimpleElement): pass
 class visibility(_SimpleElement): pass
-class when(_SimpleElement): pass
+
+
+class when(_SimpleElement):
+
+    def __init__(self, dt):
+        _SimpleElement.__init__(self, dt.strftime('%Y-%m-%dT%H:%M:%SZ'))
+
+
 class width(_SimpleElement): pass
 
 
