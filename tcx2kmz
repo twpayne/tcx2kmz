@@ -9,8 +9,12 @@ from tcx import TCX
 
 def main(argv):
     parser = OptionParser()
+    parser.add_option('-c', '--color', metavar='COLOR')
     parser.add_option('-d', '--date', metavar='DATE')
     parser.add_option('-o', '--output', metavar='FILENAME')
+    parser.add_option('-w', '--width', metavar='WIDTH', type=int)
+    parser.set_defaults(color='ff0000ff')
+    parser.set_defaults(width=3)
     options, args = parser.parse_args(argv[1:])
     document = kml.Document()
     schema = kml.Schema()
@@ -23,7 +27,7 @@ def main(argv):
                 continue
             placemark = kml.Placemark(name='%s %s' % (activity.sport, activity.id))
             style = kml.Style()
-            style.add(kml.LineStyle(color='ff0000ff', width=3))
+            style.add(kml.LineStyle(color=options.color, width=options.width))
             style.add(kml.IconStyle(kml.Icon(href='http://earth.google.com/images/kml-icons/track-directional/track-0.png')))
             placemark.add(style)
             multi_track = kml.gxMultiTrack()
