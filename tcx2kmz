@@ -10,6 +10,7 @@ from tcx import TCX
 def main(argv):
     parser = OptionParser()
     parser.add_option('-d', '--date', metavar='DATE')
+    parser.add_option('-o', '--output', metavar='FILENAME')
     options, args = parser.parse_args(argv[1:])
     document = kml.Document()
     schema = kml.Schema()
@@ -38,7 +39,11 @@ def main(argv):
                 multi_track.add(track)
             placemark.add(multi_track)
             document.add(placemark)
-    kml.kml('2.2', ('gx',), document).pretty_write(sys.stdout)
+    if options.output:
+        output = open(options.output, 'w')
+    else:
+        output = sys.stdout
+    kml.kml('2.2', ('gx',), document).pretty_write(output)
 
 
 if __name__ == '__main__':
