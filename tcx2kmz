@@ -29,7 +29,6 @@ def main(argv):
         for activity in tcx.activities:
             if options.date and not activity.id.startswith(options.date):
                 continue
-            placemark = kml.Placemark(name='%s %s' % (activity.sport, activity.id), styleUrl='#' + style.id())
             multi_track = kml.gxMultiTrack()
             for lap in activity.laps:
                 track = kml.gxTrack(altitudeMode='clampToGround')
@@ -41,6 +40,7 @@ def main(argv):
                         heart_rate.add(kml.gxvalue(trackpoint.heart_rate_bpm))
                 track.add(kml.ExtendedData(kml.SchemaData(heart_rate).add_attrs(schemaUrl='#' + schema.id())))
                 multi_track.add(track)
+            placemark = kml.Placemark(name='%s %s' % (activity.sport, activity.id), styleUrl='#' + style.id())
             placemark.add(multi_track)
             document.add(placemark)
     if options.output:
