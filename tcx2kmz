@@ -11,6 +11,7 @@ def main(argv):
     parser = OptionParser()
     parser.add_option('-c', '--color', metavar='COLOR')
     parser.add_option('-d', '--date', metavar='DATE')
+    parser.add_option('-n', '--name', metavar='NAME')
     parser.add_option('-o', '--output', metavar='FILENAME')
     parser.add_option('-w', '--width', metavar='WIDTH', type=int)
     parser.set_defaults(color='ff0000ff')
@@ -40,7 +41,11 @@ def main(argv):
                         heart_rate.add(kml.gxvalue(trackpoint.heart_rate_bpm))
                 track.add(kml.ExtendedData(kml.SchemaData(heart_rate).add_attrs(schemaUrl='#' + schema.id())))
                 multi_track.add(track)
-            placemark = kml.Placemark(name='%s %s' % (activity.sport, activity.id), styleUrl='#' + style.id())
+            if options.name:
+                name = options.name
+            else:
+                name = '%s %s' % (activity.sport, activity.id)
+            placemark = kml.Placemark(name=name, styleUrl='#' + style.id())
             placemark.add(multi_track)
             document.add(placemark)
     if options.output:
