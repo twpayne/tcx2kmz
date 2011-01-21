@@ -4,6 +4,7 @@ from optparse import OptionParser
 import sys
 
 import kml
+import kml.gx
 from tcx import TCX
 
 
@@ -19,7 +20,7 @@ def main(argv):
     options, args = parser.parse_args(argv[1:])
     document = kml.Document()
     schema = kml.Schema()
-    schema.add(kml.gxSimpleArrayField(displayName='Heart Rate').add_attrs(name='heart_rate', type='int'))
+    schema.add(kml.gx.SimpleArrayField(displayName='Heart Rate').add_attrs(name='heart_rate', type='int'))
     document.add(schema)
     style = kml.Style()
     style.add(kml.LineStyle(color=options.color, width=options.width))
@@ -30,15 +31,15 @@ def main(argv):
         for activity in tcx.activities:
             if options.date and not activity.id.startswith(options.date):
                 continue
-            multi_track = kml.gxMultiTrack()
+            multi_track = kml.gx.MultiTrack()
             for lap in activity.laps:
-                track = kml.gxTrack(altitudeMode='clampToGround')
-                heart_rate = kml.gxSimpleArrayData().add_attrs(name='heart_rate')
+                track = kml.gx.Track(altitudeMode='clampToGround')
+                heart_rate = kml.gx.SimpleArrayData().add_attrs(name='heart_rate')
                 for trackpoint in lap.track:
                     if trackpoint.latitude_degrees and trackpoint.longitude_degrees:
                         track.add(kml.when(trackpoint.time))
-                        track.add(kml.gxcoord((trackpoint.longitude_degrees, trackpoint.latitude_degrees, trackpoint.altitude_meters)))
-                        heart_rate.add(kml.gxvalue(trackpoint.heart_rate_bpm))
+                        track.add(kml.gx.coord((trackpoint.longitude_degrees, trackpoint.latitude_degrees, trackpoint.altitude_meters)))
+                        heart_rate.add(kml.gx.value(trackpoint.heart_rate_bpm))
                 track.add(kml.ExtendedData(kml.SchemaData(heart_rate).add_attrs(schemaUrl='#' + schema.id())))
                 multi_track.add(track)
             if options.name:
@@ -52,7 +53,7 @@ def main(argv):
         output = open(options.output, 'w')
     else:
         output = sys.stdout
-    kml.kml('2.2', ('gx',), document).pretty_write(output)
+    kml.kml('2.2', {'gx': '2.2'}, document).pretty_write(output)
 
 
 if __name__ == '__main__':

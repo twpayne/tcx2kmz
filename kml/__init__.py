@@ -1,18 +1,3 @@
-#   tcx2kmz KML functions
-#   Copyright (C) 2008-9  Tom Payne
-#
-#   This program is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation, either version 3 of the License, or
-#   (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from math import acos, ceil, pi
@@ -36,10 +21,7 @@ class _Element(object):
 
     def name(self):
         """Return name."""
-        if self.__class__.__name__.startswith('gx'):
-            return 'gx:' + self.__class__.__name__[2:]
-        else:
-            return self.__class__.__name__
+        return self.__class__.__name__
 
     def id(self):
         """Return a unique id."""
@@ -250,17 +232,6 @@ class extrude(_SimpleElement): pass
 class Folder(_CompoundElement): pass
 
 
-class gxcoord(_SimpleElement):
-
-    def __init__(self, coord):
-        _SimpleElement.__init__(self, ' '.join(map(str, coord)))
-
-
-class gxMultiTrack(_CompoundElement): pass
-class gxSimpleArrayData(_CompoundElement): pass
-class gxSimpleArrayField(_CompoundElement): pass
-class gxTrack(_CompoundElement): pass
-class gxvalue(_SimpleElement): pass
 class heading(_SimpleElement): pass
 class href(_SimpleElement): pass
 
@@ -309,7 +280,7 @@ class kml(_CompoundElement):
         _CompoundElement.__init__(self, *args, **kwargs)
         self.add_attrs(xmlns='http://earth.google.com/kml/%s' % version)
         if 'gx' in options:
-            self.add_attrs({'xmlns:gx': 'http://www.google.com/kml/ext/2.2'})
+            self.add_attrs({'xmlns:gx': 'http://www.google.com/kml/ext/%s' % options['gx']})
 
     def write(self, file):
         """Write self to file."""
