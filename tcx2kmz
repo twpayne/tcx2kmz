@@ -38,7 +38,7 @@ def main(argv):
                 for trackpoint in lap.track:
                     if trackpoint.latitude_degrees and trackpoint.longitude_degrees:
                         track.add(kml.when(trackpoint.time))
-                        track.add(kml.gx.coord((trackpoint.longitude_degrees, trackpoint.latitude_degrees, trackpoint.altitude_meters)))
+                        track.add(kml.gx.coord((trackpoint.longitude_degrees, trackpoint.latitude_degrees, 0)))
                         heart_rate.add(kml.gx.value(trackpoint.heart_rate_bpm))
                 track.add(kml.ExtendedData(kml.SchemaData(heart_rate).add_attrs(schemaUrl='#' + schema.id())))
                 multi_track.add(track)
