@@ -117,7 +117,7 @@ class TrackBuilder(ObjectBuilder):
 
     def exit(self, object_stack, name):
         track = object_stack.pop()
-        object_stack[-1].track = track
+        object_stack[-1].tracks.append(track)
 
 
 class LapBuilder(Builder):
@@ -137,7 +137,7 @@ class LapBuilder(Builder):
             'Track': TrackBuilder()})
     
     def enter(self, object_stack, name, attrs):
-        object_stack.append(Lap(start_time=datetime.strptime(attrs.get('StartTime'), '%Y-%m-%dT%H:%M:%SZ')))
+        object_stack.append(Lap(start_time=datetime.strptime(attrs.get('StartTime'), '%Y-%m-%dT%H:%M:%SZ'), tracks=[]))
 
     def exit(self, object_stack, name):
         lap = object_stack.pop()
